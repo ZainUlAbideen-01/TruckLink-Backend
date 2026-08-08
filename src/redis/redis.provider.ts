@@ -8,10 +8,6 @@ export const RedisProvider: Provider = {
   provide: REDIS_CLIENT,
   inject: [ConfigService],
   useFactory: (config: ConfigService) => {
-    return new Redis({
-      host: config.get<string>('REDIS_HOST', 'localhost'),
-      port: config.get<number>('REDIS_PORT', 6379),
-      password: config.get<string>('REDIS_PASSWORD') || undefined,
-    });
+    return new Redis(config.get<string>('REDIS_URL')!);
   },
 };

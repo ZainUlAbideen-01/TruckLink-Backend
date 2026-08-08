@@ -1,14 +1,12 @@
-import { Controller, Get, NotFoundException } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  @Get('ping')
-  ping() {
-    return { pong: true };
-  }
+  constructor(private readonly appService: AppService) {}
 
-  @Get('boom')
-  boom() {
-    throw new NotFoundException('nothing here');
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
   }
 }

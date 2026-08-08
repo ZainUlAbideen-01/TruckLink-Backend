@@ -48,7 +48,7 @@ export class RedisService {
     return raw ? (JSON.parse(raw) as T) : null;
   }
 
-  async setJson(key: string, value: unknown, ttlSeconds?: number): Promise<void> {
+  async setJson<T>(key: string, value: unknown, ttlSeconds?: number): Promise<T | void> {
     await this.set(key, JSON.stringify(value), ttlSeconds);
   }
 }

@@ -7,6 +7,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { DriversModule } from './drivers/drivers.module';
+import { RecruitersModule } from './recruiters/recruiters.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { DriversModule } from './drivers/drivers.module';
     UsersModule,
     AuthModule,
     DriversModule,
+    RecruitersModule,
   ],
   controllers: [],
   providers: [],

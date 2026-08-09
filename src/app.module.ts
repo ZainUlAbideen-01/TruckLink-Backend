@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { DriversModule } from './drivers/drivers.module';
 import { RecruitersModule } from './recruiters/recruiters.module';
+import { JobPostingsModule } from './job-postings/job-postings.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { RecruitersModule } from './recruiters/recruiters.module';
     AuthModule,
     DriversModule,
     RecruitersModule,
+    JobPostingsModule,
   ],
   controllers: [],
   providers: [],

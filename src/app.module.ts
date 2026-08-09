@@ -6,6 +6,7 @@ import { RedisModule } from './redis/redis.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { DriversModule } from './drivers/drivers.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
     CloudinaryModule,
     UsersModule,
     AuthModule,
+    DriversModule,
   ],
   controllers: [],
   providers: [],

@@ -44,7 +44,7 @@ export class DriverProfile {
   })
   status: DriverProfileStatus;
 
-  @Prop({ default: null })
+  @Prop({ type: String, default: null })
   statusReason: string | null;
 
   @Prop()

@@ -13,7 +13,7 @@ export class DriverStatusHistory {
   @Prop({ type: String, enum: DriverProfileStatus, required: true })
   status: DriverProfileStatus;
 
-  @Prop({ default: null })
+  @Prop({ type: String, default: null })
   reason: string | null;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })

@@ -9,6 +9,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { MailService } from '../mail/mail.service';
 import { randomBytes, randomInt } from 'crypto';
 import { RedisService } from '../redis/redis.service';
 import { UsersService } from '../users/users.service';
@@ -46,6 +47,7 @@ export class AuthService {
         private readonly usersService: UsersService,
         private readonly jwtService: JwtService,
         private readonly config: ConfigService,
+        private readonly mailService: MailService,
     ) {
         this.otpTtl = Number(this.config.get('OTP_TTL_SECONDS', 300));
         this.otpResendMax = Number(this.config.get('OTP_RESEND_MAX', 3));
@@ -81,15 +83,13 @@ export class AuthService {
         }
 
         const otp = randomInt(0, 1_000_000).toString().padStart(6, '0');
-    await this.redis.setJson<OtpRecord>(
+        await this.redis.setJson<OtpRecord>(
             this.otpKey(dto.email),
             { otp, role: dto.role },
             this.otpTtl,
         );
 
-        // TODO: wire a real transactional email provider (open item #17).
-        // Logged here for local dev so you can complete the flow without an inbox.
-        console.log(`[DEV] OTP for ${dto.email}: ${otp}`);
+        await this.mailService.sendOtpEmail(dto.email, otp, this.otpTtl);
 
         return {
             email: dto.email,
@@ -108,7 +108,7 @@ export class AuthService {
         await this.redis.del(this.otpKey(dto.email));
 
         const token = randomBytes(16).toString('hex');
-    await this.redis.setJson<SignupTokenRecord>(
+        await this.redis.setJson<SignupTokenRecord>(
             this.signupTokenKey(token),
             { email: dto.email, role: record.role },
             this.verificationTtl,

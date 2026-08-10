@@ -10,8 +10,6 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { User, UserDocument, UserRole } from './schemas/user.schema';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ChangePasswordDto } from './dto/change-password.dto';
-
 export interface CreateUserInput {
   email: string;
   password: string;
@@ -74,18 +72,10 @@ export class UsersService {
     return user;
   }
 
-  async changePassword(userId: string, dto: ChangePasswordDto): Promise<void> {
-    const user = await this.userModel
-      .findById(userId)
-      .select('+passwordHash');
+  async setPassword(userId: string, newPassword: string): Promise<void> {
+    const user = await this.userModel.findById(userId).select('+passwordHash');
     if (!user) throw new NotFoundException('User not found');
-
-    const matches = await bcrypt.compare(dto.currentPassword, user.passwordHash);
-    if (!matches) {
-      throw new UnauthorizedException('Current password is incorrect');
-    }
-
-    user.passwordHash = await bcrypt.hash(dto.newPassword, 10);
+    user.passwordHash = await bcrypt.hash(newPassword, 10);
     await user.save();
   }
 }

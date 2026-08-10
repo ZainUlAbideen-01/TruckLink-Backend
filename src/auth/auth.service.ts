@@ -17,6 +17,9 @@ import { UserRole } from '../users/schemas/user.schema';
 import { RequestOtpDto } from './dto/request-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { SignupDto } from './dto/signup.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { VerifyForgotPasswordOtpDto } from './dto/verify-forgot-password-otp.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 // Nest doesn't export a 429 exception by default — define one.
 class TooManyRequestsException extends HttpException {
@@ -65,6 +68,18 @@ export class AuthService {
 
     private signupTokenKey(token: string) {
         return `signup_token:${token}`;
+    }
+
+    private forgotOtpKey(email: string) {
+        return `otp:forgot:${email.toLowerCase()}`;
+    }
+
+    private forgotRateKey(email: string) {
+        return `otp:forgot:ratelimit:${email.toLowerCase()}`;
+    }
+
+    private resetTokenKey(token: string) {
+        return `reset_token:${token}`;
     }
 
     // ---- Step 1: request OTP ----
@@ -144,6 +159,60 @@ export class AuthService {
         await this.redis.del(this.signupTokenKey(dto.verificationToken));
 
         return user;
+    }
+
+    // ---- Forgot password: step 1, request OTP ----
+    async forgotPassword(dto: ForgotPasswordDto) {
+        const user = await this.usersService.findByEmail(dto.email);
+        // Always return the same shape whether or not the account exists,
+        // so this endpoint can't be used to enumerate registered emails.
+        if (!user) {
+            return { email: dto.email, otpSent: true, expiresInSeconds: this.otpTtl };
+        }
+
+        const attempts = await this.redis.incrWithWindow(
+            this.forgotRateKey(dto.email),
+            this.otpResendWindow,
+        );
+        if (attempts > this.otpResendMax) {
+            throw new TooManyRequestsException('Too many requests. Try again later.');
+        }
+
+        const otp = randomInt(0, 1_000_000).toString().padStart(6, '0');
+        await this.redis.set(this.forgotOtpKey(dto.email), otp, this.otpTtl);
+
+        await this.mailService.sendOtpEmail(dto.email, otp, this.otpTtl);
+
+        return { email: dto.email, otpSent: true, expiresInSeconds: this.otpTtl };
+    }
+
+    // ---- Forgot password: step 2, verify OTP ----
+    async verifyForgotPasswordOtp(dto: VerifyForgotPasswordOtpDto) {
+        const storedOtp = await this.redis.get(this.forgotOtpKey(dto.email));
+        if (!storedOtp || storedOtp !== dto.otp) {
+            throw new UnauthorizedException('OTP is incorrect, expired, or was never requested');
+        }
+
+        await this.redis.del(this.forgotOtpKey(dto.email));
+
+        const token = randomBytes(16).toString('hex');
+        await this.redis.set(this.resetTokenKey(token), dto.email.toLowerCase(), this.verificationTtl);
+
+        return { resetToken: token, expiresInSeconds: this.verificationTtl };
+    }
+
+    // ---- Forgot password: step 3, set new password ----
+    async resetPassword(dto: ResetPasswordDto) {
+        const email = await this.redis.get(this.resetTokenKey(dto.resetToken));
+        if (!email) {
+            throw new UnauthorizedException('Reset token is invalid or expired');
+        }
+
+        const user = await this.usersService.findByEmail(email);
+        if (!user) throw new UnauthorizedException('Reset token is invalid or expired');
+
+        await this.usersService.setPassword(user._id.toString(), dto.newPassword);
+        await this.redis.del(this.resetTokenKey(dto.resetToken));
     }
 
     // ---- Login ----

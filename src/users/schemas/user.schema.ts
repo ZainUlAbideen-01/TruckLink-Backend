@@ -13,22 +13,22 @@ export enum UserRole {
 @Schema({ timestamps: true })
 export class User {
   @Prop({ required: true, unique: true, lowercase: true, trim: true })
-  email!: string;
+  email: string;
 
   @Prop({ required: true, select: false })
-  passwordHash!: string;
+  passwordHash: string;
 
   @Prop({ required: true, enum: UserRole })
-  role!: UserRole;
+  role: UserRole;
 
   @Prop({ required: true })
-  emailVerifiedAt!: Date;
+  emailVerifiedAt: Date;
 
   @Prop({ required: true })
-  firstName!: string;
+  firstName: string;
 
   @Prop({ required: true })
-  lastName!: string;
+  lastName: string;
 
   @Prop()
   phone?: string;

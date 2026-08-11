@@ -31,5 +31,5 @@ export class CreateDriverProfileDto {
   // Enum values are TBD per spec §4 — keeping this loose (string) rather than
   // hardcoding a fixed IsIn list. Tighten once master-data confirms values.
   @IsString()
-  availability!: string;
+  availability: string;
 }

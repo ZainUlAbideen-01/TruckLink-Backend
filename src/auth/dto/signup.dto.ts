@@ -3,23 +3,23 @@ import { IsEmail, IsIn, IsOptional, IsString, MinLength } from 'class-validator'
 
 export class SignupDto {
   @IsString()
-  verificationToken!: string;
+  verificationToken: string;
 
   @IsEmail()
-  email!: string;
+  email: string;
 
   @IsIn(['DRIVER', 'RECRUITER'])
-  role!: 'DRIVER' | 'RECRUITER';
+  role: 'DRIVER' | 'RECRUITER';
 
   @IsString()
   @MinLength(8)
-  password!: string;
+  password: string;
 
   @IsString()
-  firstName!: string;
+  firstName: string;
 
   @IsString()
-  lastName!: string;
+  lastName: string;
 
   @IsOptional()
   @IsString()

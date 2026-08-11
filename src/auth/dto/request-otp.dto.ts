@@ -3,8 +3,8 @@ import { IsEmail, IsIn } from 'class-validator';
 
 export class RequestOtpDto {
   @IsEmail()
-  email!: string;
+  email: string;
 
   @IsIn(['DRIVER', 'RECRUITER'])
-  role!: 'DRIVER' | 'RECRUITER';
+  role: 'DRIVER' | 'RECRUITER';
 }

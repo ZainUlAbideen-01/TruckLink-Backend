@@ -7,25 +7,25 @@ export type DriverDocumentDocument = HydratedDocument<DriverDocument>;
 @Schema({ timestamps: { createdAt: 'uploadedAt', updatedAt: false } })
 export class DriverDocument {
   @Prop({ type: Types.ObjectId, ref: 'DriverProfile', required: true })
-  driverProfileId!: Types.ObjectId;
+  driverProfileId: Types.ObjectId;
 
   @Prop({ required: true })
-  documentType!: string;
+  documentType: string;
 
   @Prop({ required: true })
-  cloudinaryPublicId!: string;
+  cloudinaryPublicId: string;
 
   @Prop({ required: true })
-  secureUrl!: string;
+  secureUrl: string;
 
   @Prop({ required: true })
-  resourceType!: string;
+  resourceType: string;
 
   @Prop({ required: true })
-  format!: string;
+  format: string;
 
   @Prop({ required: true })
-  bytes!: number;
+  bytes: number;
 }
 
 export const DriverDocumentSchema = SchemaFactory.createForClass(DriverDocument);

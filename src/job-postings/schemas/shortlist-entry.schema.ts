@@ -7,10 +7,10 @@ export type ShortlistEntryDocument = HydratedDocument<ShortlistEntry>;
 @Schema({ timestamps: { createdAt: 'shortlistedAt', updatedAt: false } })
 export class ShortlistEntry {
   @Prop({ type: Types.ObjectId, ref: 'JobPosting', required: true })
-  jobPostingId!: Types.ObjectId;
+  jobPostingId: Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: 'DriverProfile', required: true })
-  driverId!: Types.ObjectId;
+  driverId : Types.ObjectId;
 }
 
 export const ShortlistEntrySchema = SchemaFactory.createForClass(ShortlistEntry);

@@ -33,13 +33,13 @@ export class JobPosting {
   equipmentType!: string;
 
   @Prop({ required: true })
-  routeType!: string;
+  routeType: string;
 
   @Prop({ required: true })
-  region!: string;
+  region: string;
 
   @Prop({ type: String, enum: JobPostingStatus, default: JobPostingStatus.OPEN })
-  status!: JobPostingStatus;
+  status: JobPostingStatus;
 }
 
 export const JobPostingSchema = SchemaFactory.createForClass(JobPosting);

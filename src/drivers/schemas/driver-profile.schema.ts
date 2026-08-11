@@ -13,45 +13,56 @@ export enum DriverProfileStatus {
 
 @Schema({ timestamps: true })
 export class DriverProfile {
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true, unique: true })
-  userId: Types.ObjectId;
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'User',
+    required: true,
+    unique: true,
+  })
+  userId!: Types.ObjectId;
 
   @Prop({ required: true })
-  cdlClass: string;
+  cdlClass!: string;
 
   @Prop({ type: [String], default: [] })
-  endorsements: string[];
+  endorsements!: string[];
 
   @Prop({ required: true, min: 0 })
-  yearsOfExperience: number;
+  yearsOfExperience!: number;
 
   @Prop({ type: [String], default: [] })
-  preferredEquipmentTypes: string[];
+  preferredEquipmentTypes!: string[];
 
   @Prop({ type: [String], default: [] })
-  preferredRoutes: string[];
+  preferredRoutes!: string[];
 
   @Prop()
   homeRegion?: string;
 
   @Prop({ required: true })
-  availability: string;
+  availability!: string;
 
   @Prop({
     type: String,
     enum: DriverProfileStatus,
     default: DriverProfileStatus.PENDING,
   })
-  status: DriverProfileStatus;
+  status!: DriverProfileStatus;
 
-  @Prop({ type: String, default: null })
-  statusReason: string | null;
+@Prop({ type: String, default: null })
+statusReason: string | null = null;
 
   @Prop()
   submittedAt?: Date;
 }
 
-export const DriverProfileSchema = SchemaFactory.createForClass(DriverProfile);
+export const DriverProfileSchema =
+  SchemaFactory.createForClass(DriverProfile);
 
 // Speeds up recruiter/admin directory filtering (§4 List Drivers)
-DriverProfileSchema.index({ status: 1, cdlClass: 1, homeRegion: 1 });
+DriverProfileSchema.index({
+  status: 1,
+  cdlClass: 1,
+  homeRegion: 1,
+});
+

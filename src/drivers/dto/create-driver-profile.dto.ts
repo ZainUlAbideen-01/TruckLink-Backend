@@ -3,7 +3,7 @@ import { IsArray, IsIn, IsInt, IsOptional, IsString, Min } from 'class-validator
 
 export class CreateDriverProfileDto {
   @IsString()
-  cdlClass: string;
+  cdlClass!: string;
 
   @IsOptional()
   @IsArray()
@@ -12,7 +12,7 @@ export class CreateDriverProfileDto {
 
   @IsInt()
   @Min(0)
-  yearsOfExperience: number;
+  yearsOfExperience!: number;
 
   @IsOptional()
   @IsArray()
@@ -31,5 +31,5 @@ export class CreateDriverProfileDto {
   // Enum values are TBD per spec §4 — keeping this loose (string) rather than
   // hardcoding a fixed IsIn list. Tighten once master-data confirms values.
   @IsString()
-  availability: string;
+  availability!: string;
 }

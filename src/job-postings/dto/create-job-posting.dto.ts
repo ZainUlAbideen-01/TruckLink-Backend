@@ -3,13 +3,13 @@ import { IsArray, IsInt, IsOptional, IsString, Min } from 'class-validator';
 
 export class CreateJobPostingDto {
   @IsString()
-  title: string;
+  title!: string;
 
   @IsString()
-  description: string;
+  description!: string;
 
   @IsString()
-  requiredCdlClass: string;
+  requiredCdlClass!: string;
 
   @IsOptional()
   @IsArray()
@@ -22,11 +22,11 @@ export class CreateJobPostingDto {
   minExperience?: number;
 
   @IsString()
-  equipmentType: string;
+  equipmentType!: string;
 
   @IsString()
-  routeType: string;
+  routeType!: string;
 
   @IsString()
-  region: string;
+  region!: string;
 }

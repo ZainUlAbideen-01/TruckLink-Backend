@@ -13,10 +13,10 @@ export enum RecruiterAccountStatus {
 @Schema({ timestamps: true })
 export class RecruiterProfile {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true, unique: true })
-  userId: Types.ObjectId;
+  userId!: Types.ObjectId;
 
   @Prop({ required: true })
-  companyName: string;
+  companyName!: string;
 
   @Prop()
   companyDescription?: string;
@@ -32,7 +32,7 @@ export class RecruiterProfile {
     enum: RecruiterAccountStatus,
     default: RecruiterAccountStatus.PENDING,
   })
-  accountStatus: RecruiterAccountStatus;
+  accountStatus!: RecruiterAccountStatus;
 }
 
 export const RecruiterProfileSchema = SchemaFactory.createForClass(RecruiterProfile);

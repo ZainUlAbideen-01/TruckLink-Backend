@@ -12,34 +12,34 @@ export enum JobPostingStatus {
 @Schema({ timestamps: true })
 export class JobPosting {
   @Prop({ type: Types.ObjectId, ref: 'RecruiterProfile', required: true })
-  recruiterId: Types.ObjectId;
+  recruiterId!: Types.ObjectId;
 
   @Prop({ required: true })
-  title: string;
+  title!: string;
 
   @Prop({ required: true })
-  description: string;
+  description!: string;
 
   @Prop({ required: true })
-  requiredCdlClass: string;
+  requiredCdlClass!: string;
 
   @Prop({ type: [String], default: [] })
-  requiredEndorsements: string[];
+  requiredEndorsements!: string[];
 
   @Prop({ default: 0 })
-  minExperience: number;
+  minExperience!: number;
 
   @Prop({ required: true })
-  equipmentType: string;
+  equipmentType!: string;
 
   @Prop({ required: true })
-  routeType: string;
+  routeType!: string;
 
   @Prop({ required: true })
-  region: string;
+  region!: string;
 
   @Prop({ type: String, enum: JobPostingStatus, default: JobPostingStatus.OPEN })
-  status: JobPostingStatus;
+  status!: JobPostingStatus;
 }
 
 export const JobPostingSchema = SchemaFactory.createForClass(JobPosting);

@@ -10,6 +10,11 @@ import { AuthModule } from './auth/auth.module';
 import { DriversModule } from './drivers/drivers.module';
 import { RecruitersModule } from './recruiters/recruiters.module';
 import { JobPostingsModule } from './job-postings/job-postings.module';
+import { ApplicationsModule } from './applications/applications.module';
+import { ModerationModule } from './moderation/moderation.module';
+import { AdminModule } from './admin/admin.module';
+import { MasterDataModule } from './master-data/master-data.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -23,6 +28,11 @@ import { JobPostingsModule } from './job-postings/job-postings.module';
     DriversModule,
     RecruitersModule,
     JobPostingsModule,
+    ApplicationsModule,
+    ModerationModule,
+    AdminModule,
+    MasterDataModule,
+    NotificationsModule
   ],
   controllers: [],
   providers: [],
